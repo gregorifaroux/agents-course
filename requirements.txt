@@ -1,0 +1,10 @@
+tokenizers>=0.21
+smolagents[litellm]
+pytz
+pyyaml
+gradio
+markdownify
+requests
+duckduckgo_search
+pandas
+ddgs
