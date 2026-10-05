@@ -9,5 +9,5 @@ if ! curl -sf http://127.0.0.1:11434 > /dev/null; then
 fi
 
 echo "Ollama is up."
-python "${1:-dummyagent.py}"
+python "${1:-testlocalmodel/testlocalmodel.py}"
 
