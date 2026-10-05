@@ -55,3 +55,8 @@ Gradio will print a local URL. Open it to chat with the agent.
 - `Gradio_UI.py` — UI wrapper.
 - `requirements.txt` — Python dependencies.
 - `app.sh` — convenience launcher.
+
+## Subfolders
+
+- `dummyagent/` — minimal from-scratch ReAct agent calling Ollama directly via `huggingface_hub`. See [`dummyagent/README.md`](dummyagent/README.md).
+- `testlocalmodel/` — smoke test for the Ollama + LiteLLM wiring. See [`testlocalmodel/README.md`](testlocalmodel/README.md).
