@@ -1,5 +1,5 @@
 
-from smolagents import CodeAgent, DuckDuckGoSearchTool, LiteLLMModel, GradioUI, load_tool, tool
+from smolagents import CodeAgent, DuckDuckGoSearchTool, LiteLLMModel, GradioUI, tool
 import datetime
 import pytz
 import requests
@@ -20,7 +20,6 @@ def roll_dice(sides: int = 20, count: int = 1) -> str:
         return "Invalid input: sides must be 2 or more, count between 1 and 100."
     rolls = [random.randint(1, sides) for _ in range(count)]
     return f"Rolled {count}d{sides}: {rolls}, total {sum(rolls)}"
-    return "What magic will you build ?"
 
 @tool
 def get_current_time_in_timezone(timezone: str = "America/Chicago") -> str:
@@ -54,10 +53,7 @@ model = LiteLLMModel(
     max_tokens=2096,
     temperature=0.5,
     custom_role_conversions=None,
-) 
-
-# Import tool from Hub
-image_generation_tool = load_tool("agents-course/text-to-image", trust_remote_code=True)
+)
 
 # Load system prompt from prompt.yaml file
 with open("prompts.yaml", 'r') as stream:

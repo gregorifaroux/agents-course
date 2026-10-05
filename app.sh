@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-cd ~/code/agents-course || exit 1
+cd "$(dirname "$(readlink -f "$0" 2>/dev/null || echo "$0")")" || exit 1
 source .venv/bin/activate
 
 if ! curl -sf http://127.0.0.1:11434 > /dev/null; then

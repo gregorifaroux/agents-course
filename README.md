@@ -9,7 +9,6 @@ A smolagents `CodeAgent` wired to a local Ollama model (`qwen2:7b` via LiteLLM) 
 - `get_weather` — current weather from `wttr.in`.
 - `DuckDuckGoSearchTool` — web search.
 - `FinalAnswerTool` — required terminator for the agent loop.
-- `agents-course/text-to-image` — loaded from the Hub.
 
 ## Prerequisites
 
