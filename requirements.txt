@@ -1,3 +1,4 @@
+python-dotenv
 tokenizers>=0.21
 smolagents[litellm]
 pytz
@@ -8,3 +9,7 @@ requests
 duckduckgo_search
 pandas
 ddgs
+opentelemetry-sdk 
+opentelemetry-exporter-otlp 
+openinference-instrumentation-smolagents 
+langfuse
