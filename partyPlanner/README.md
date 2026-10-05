@@ -1,6 +1,6 @@
 # partyPlanner
 
-A smolagents `CodeAgent` roleplaying Alfred planning a party at Wayne Manor. Uses a local Ollama model (`qwen2.5:14b` via LiteLLM) and a mix of custom tools plus web search.
+A smolagents `CodeAgent` roleplaying Alfred planning a party at Wayne Manor. Uses a local Ollama model (`qwen2.5:14b` via LiteLLM) and a mix of custom tools plus web search. Instrumented with OpenInference and traces exported to Langfuse.
 
 ## Tools
 
@@ -10,6 +10,18 @@ A smolagents `CodeAgent` roleplaying Alfred planning a party at Wayne Manor. Use
 - `DuckDuckGoSearchTool` — web search.
 - `VisitWebpageTool` — fetch a webpage.
 - `FinalAnswerTool` — required terminator for the agent loop.
+
+## Telemetry
+
+The agent is instrumented via `openinference-instrumentation-smolagents` and ships traces to Langfuse. Credentials are read from a `.env` at the project root:
+
+```
+LANGFUSE_SECRET_KEY=...
+LANGFUSE_PUBLIC_KEY=...
+LANGFUSE_BASE_URL=...
+```
+
+On startup the agent calls `langfuse.auth_check()` and prints whether the client authenticated. Traces appear in the configured Langfuse project.
 
 ## Run
 
