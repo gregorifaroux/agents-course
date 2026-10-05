@@ -1,4 +1,4 @@
-from smolagents import CodeAgent, DuckDuckGoSearchTool, FinalAnswerTool, LiteLLMModel, Tool, tool, VisitWebpageTool
+from smolagents import CodeAgent, DuckDuckGoSearchTool, FinalAnswerTool, LiteLLMModel, Tool, ToolCallingAgent, tool, VisitWebpageTool
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -16,11 +16,11 @@ SmolagentsInstrumentor().instrument()
 
 
 @tool
-def suggest_menu(occasion: str) -> str:
+def suggest_food_menu(occasion: str) -> str:
     """
-    Suggests a menu based on the occasion.
+    Suggests FOOD and drinks for a party. It does not return music or songs.
     Args:
-        occasion: One of 'casual', 'formal', or 'superhero'. Pick the closest match, for example 'formal' for a formal dinner.
+        occasion: One of 'casual', 'formal', or 'superhero'. Pick the closest match.
     """
     occasion = occasion.lower()
     if "casual" in occasion:
@@ -93,15 +93,22 @@ agent = CodeAgent(
     tools=[
         DuckDuckGoSearchTool(), 
         VisitWebpageTool(),
-        suggest_menu,
+        suggest_food_menu,
         catering_service_tool,
         SuperheroPartyThemeTool(),
 	FinalAnswerTool()
     ], 
     model=model,
+    instructions="Call one tool at a time and print the result. Never call final_answer in the same code block as another tool.",
     max_steps=10,
     verbosity_level=2
 )
 
-agent.run("Give me the best 5 songs and artist for a party at the Wayne's mansion. The party idea is a 'villain masquerade' theme")
+agent.run("Use the web search tool to find best 5 songs and artist for a party at the Wayne's mansion. The party idea is a 'villain masquerade' theme")
 agent.run("Suggest a menu for formal dinner")
+
+# Tool Calling Agents are the second type of agent available in smolagents.
+# Unlike Code Agents that use Python snippets, these agents use the built-in tool-calling capabilities of LLM providers to generate tool calls
+# as JSON structures. This is the standard approach used by OpenAI, Anthropic, and many other providers.
+agentJSON = ToolCallingAgent(tools=[DuckDuckGoSearchTool()], model=model)
+agentJSON.run("Search for the best music recommendations for a party at the Wayne's mansion.")

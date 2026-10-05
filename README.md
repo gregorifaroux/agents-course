@@ -59,4 +59,4 @@ Gradio will print a local URL. Open it to chat with the agent.
 
 - `dummyagent/` — minimal from-scratch ReAct agent calling Ollama directly via `huggingface_hub`. See [`dummyagent/README.md`](dummyagent/README.md).
 - `testlocalmodel/` — smoke test for the Ollama + LiteLLM wiring. See [`testlocalmodel/README.md`](testlocalmodel/README.md).
-- `partyPlanner/` — Alfred-at-Wayne-Manor `CodeAgent` with custom party-planning tools. See [`partyPlanner/README.md`](partyPlanner/README.md).
+- `partyPlanner/` — Alfred-at-Wayne-Manor smolagents demo. Runs a `CodeAgent` (Python-snippet tool calls) and a `ToolCallingAgent` (JSON tool calls) on the same model for comparison. See [`partyPlanner/README.md`](partyPlanner/README.md).
