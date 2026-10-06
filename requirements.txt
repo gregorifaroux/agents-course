@@ -13,3 +13,6 @@ opentelemetry-sdk
 opentelemetry-exporter-otlp 
 openinference-instrumentation-smolagents 
 langfuse
+langchain-community
+langchain-text-splitters
+rank-bm25
