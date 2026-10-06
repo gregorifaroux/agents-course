@@ -16,3 +16,8 @@ langfuse
 langchain-community
 langchain-text-splitters
 rank-bm25
+plotly
+geopandas
+shapely
+kaleido
+geopy
