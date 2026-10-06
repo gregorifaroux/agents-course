@@ -1,4 +1,4 @@
-# AgenticRAG
+# agenticRAG
 
 Two smolagents examples backed by a local Ollama model.
 
