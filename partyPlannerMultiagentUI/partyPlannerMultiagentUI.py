@@ -28,7 +28,7 @@ class ButlerGradioUI(GradioUI):
         chatbot = gr.Chatbot(
             label="Devoted Butler",
             placeholder=PLACEHOLDER,
-            avatar_images=(None, "partyPlannerMultiagentUI/butler.png"),
+            avatar_images=(None, "partyPlannerMultiagentUI/images/butler.png"),
             latex_delimiters=[
                 {"left": r"$$", "right": r"$$", "display": True},
                 {"left": r"$", "right": r"$", "display": False},
