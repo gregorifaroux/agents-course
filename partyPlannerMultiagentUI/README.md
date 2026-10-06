@@ -1,12 +1,18 @@
 # partyPlannerMultiagentUI
 
-The same manager/worker party-planner as [`partyPlannerMultiagent/`](../partyPlannerMultiagent/README.md), wrapped in `smolagents.GradioUI` so you can submit the party brief from a browser chat window instead of hardcoding it in the script.
+The same manager/worker party-planner as [`partyPlannerMultiagent/`](../partyPlannerMultiagent/README.md), exposed through a Gradio chat UI so you can submit the party brief from a browser instead of hardcoding it in the script.
+
+![Devoted Butler UI](images/butler_screenshot.png)
 
 ## How it differs from `partyPlannerMultiagent/`
 
-- The script does not call `manager.run(...)`. It calls `GradioUI(manager).launch(share=False)`, using the built-in UI from `smolagents` that renders intermediate thoughts (planning steps, tool calls, execution logs) as collapsible blocks.
+- The script does not call `manager.run(...)`. It launches a `ButlerGradioUI(manager)` which subclasses `smolagents.GradioUI` to:
+  - Set a markdown `placeholder` on the chatbot so the empty chat shows "Devoted Butler" instructions (theme, venue, example prompt) instead of a blank pane.
+  - Wrap `gr.ChatInterface` in `gr.Blocks(theme="soft")` for a cleaner look.
+  - Set the chatbot label and interface title to `"Devoted Butler"`.
+- The native UI still renders smolagents intermediate thoughts (planning steps, tool calls, execution logs) as collapsible blocks and unwraps `FinalAnswerStep` output correctly.
 - The user types each party brief in the chat UI; the manager still delegates to `song_agent` and `food_agent` under the hood.
-- The manager carries a `name` and `description` so the Gradio header shows the agent identity. smolagents requires `name` to be a valid Python identifier, so the display name lives in `description`:
+- The manager carries a `name` and `description`. smolagents requires `name` to be a valid Python identifier, so the display name lives in `description`:
   - `name="devoted_butler"`
   - `description="Devoted Butler. Help plan your party... music, food, you name it."`
 - Everything else (model, tools, worker definitions, prompt templates, manager instructions) is unchanged.
@@ -24,5 +30,6 @@ Gradio prints a local URL. Open it, type a party brief (for example "Plan a vill
 
 ## Files
 
-- `partyPlannerMultiagentUI.py` — model, tools, workers, manager, Gradio launch.
+- `partyPlannerMultiagentUI.py` — model, tools, workers, manager, `ButlerGradioUI` subclass, Gradio launch.
 - `partyPlannerMultiagentUI.sh` — launcher.
+- `images/butler_screenshot.png` — UI screenshot shown above.

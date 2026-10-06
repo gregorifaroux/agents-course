@@ -6,11 +6,49 @@ wrapped in smolagents.GradioUI so the user can type the party brief in a chat
 box instead of hardcoding a prompt.
 """
 from smolagents import CodeAgent, ToolCallingAgent, GradioUI, LiteLLMModel, tool
-import requests
 import gradio as gr
+import requests
 
-def respond(message, history):
-    return f"Echoing back your message: {message}"
+
+PLACEHOLDER = (
+    "### 🎩 Devoted Butler\n"
+    "Describe your party and I'll coordinate songs and a menu for you.\n\n"
+    "- Give me a theme (for example 'villain masquerade')\n"
+    "- Tell me the venue (for example 'Wayne's mansion')\n"
+    "- Ask for both songs and a menu, or just one\n\n"
+    "_Example:_ Plan a villain masquerade party at Wayne's mansion."
+)
+
+
+class ButlerGradioUI(GradioUI):
+    """GradioUI with a placeholder prompt, soft theme, and matching title."""
+
+    def create_app(self):
+        type_messages_kwarg = {"type": "messages"} if gr.__version__.startswith("5") else {}
+        chatbot = gr.Chatbot(
+            label="Devoted Butler",
+            placeholder=PLACEHOLDER,
+            avatar_images=(None, "partyPlannerMultiagentUI/butler.png"),
+            latex_delimiters=[
+                {"left": r"$$", "right": r"$$", "display": True},
+                {"left": r"$", "right": r"$", "display": False},
+                {"left": r"\[", "right": r"\]", "display": True},
+                {"left": r"\(", "right": r"\)", "display": False},
+            ],
+            scale=1,
+            **type_messages_kwarg,
+        )
+        with gr.Blocks(theme="soft") as demo:
+            gr.ChatInterface(
+                fn=self._stream_response,
+                chatbot=chatbot,
+                title="Devoted Butler",
+                multimodal=self.file_upload_folder is not None,
+                save_history=True,
+                **type_messages_kwarg,
+            )
+        return demo
+
 
 model = LiteLLMModel(
     model_id="ollama_chat/qwen2.5:14b",
@@ -114,4 +152,4 @@ manager = CodeAgent(
 
 
 if __name__ == "__main__":
-    GradioUI(manager).launch(share=False)
+    ButlerGradioUI(manager).launch(share=False)
