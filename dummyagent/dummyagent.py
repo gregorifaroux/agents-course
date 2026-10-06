@@ -1,6 +1,16 @@
+"""Minimal manual tool-use loop against a local Ollama model.
+
+No framework. We feed the LLM a ReAct-style system prompt, stop it before it
+hallucinates an observation, run the "tool" ourselves in Python, splice the
+real result back into the conversation, and let the model finish.
+
+This file exists to show what smolagents / LangChain do under the hood.
+"""
 from huggingface_hub import InferenceClient
 
-# Dummy function
+
+# Stand-in for a real tool. Returns a nonsense sentinel so you can tell
+# whether the final answer actually used the tool output or made one up.
 def get_weather(location):
     return f"the weather in {location} is zorblax-42. \n"
 
@@ -40,9 +50,13 @@ Final Answer: the final answer to the original input question
 
 Now begin! Reminder to ALWAYS use the exact characters `Final Answer:` when you provide a definitive answer. """
 
+# Ollama exposes an OpenAI-compatible endpoint at /v1, so the HF
+# InferenceClient works against it unchanged.
 client = InferenceClient(base_url="http://127.0.0.1:11434/v1")
 
-# Step 1: ask, and stop before the model invents a weather result
+# Step 1: ask the model, and stop generation the moment it writes
+# "Observation:". Without the stop token the model would happily invent its
+# own weather reading right after the Action block.
 messages = [
     {"role": "system", "content": SYSTEM_PROMPT},
     {"role": "user", "content": "What's the weather in London?"},
@@ -57,7 +71,9 @@ output = client.chat.completions.create(
 )
 print(output.choices[0].message.content)
 
-# Step 2: run the tool yourself, then hand the result back
+# Step 2: execute the tool in real Python, splice the result into the
+# assistant turn after the "Observation:" marker, then let the model continue
+# and produce its Final Answer from the real tool output.
 messages.append({
     "role": "assistant",
     "content": output.choices[0].message.content + "Observation:\n" + get_weather("London"),
