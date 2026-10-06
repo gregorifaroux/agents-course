@@ -38,7 +38,15 @@ class ButlerGradioUI(GradioUI):
             scale=1,
             **type_messages_kwarg,
         )
-        with gr.Blocks(theme="soft") as demo:
+        css = """
+        .avatar-container img {
+            object-fit: cover !important;
+            width: 100% !important;
+            height: 100% !important;
+            padding: 0 !important;
+        }
+        """
+        with gr.Blocks(theme="soft", css=css) as demo:
             gr.ChatInterface(
                 fn=self._stream_response,
                 chatbot=chatbot,

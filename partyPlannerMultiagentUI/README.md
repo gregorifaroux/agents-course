@@ -10,6 +10,8 @@ The same manager/worker party-planner as [`partyPlannerMultiagent/`](../partyPla
   - Set a markdown `placeholder` on the chatbot so the empty chat shows "Devoted Butler" instructions (theme, venue, example prompt) instead of a blank pane.
   - Wrap `gr.ChatInterface` in `gr.Blocks(theme="soft")` for a cleaner look.
   - Set the chatbot label and interface title to `"Devoted Butler"`.
+  - Inject CSS that forces `.avatar-container img` to `object-fit: cover` with no padding, so the butler avatar fills the circle instead of fitting with whitespace.
+  - Point `avatar_images` at the local `images/butler.png` (remote URLs are flaky in Gradio 6's asset proxy).
 - The native UI still renders smolagents intermediate thoughts (planning steps, tool calls, execution logs) as collapsible blocks and unwraps `FinalAnswerStep` output correctly.
 - The user types each party brief in the chat UI; the manager still delegates to `song_agent` and `food_agent` under the hood.
 - The manager carries a `name` and `description`. smolagents requires `name` to be a valid Python identifier, so the display name lives in `description`:
