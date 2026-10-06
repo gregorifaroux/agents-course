@@ -51,7 +51,6 @@ Gradio will print a local URL. Open it to chat with the agent.
 - `app.py` — agent definition, tools, and Gradio launch.
 - `prompts.yaml` — system prompt templates passed to `CodeAgent`.
 - `tools/final_answer.py` — final-answer tool.
-- `Gradio_UI.py` — UI wrapper.
 - `requirements.txt` — Python dependencies.
 - `app.sh` — convenience launcher.
 
@@ -61,3 +60,4 @@ Gradio will print a local URL. Open it to chat with the agent.
 - `testlocalmodel/` — smoke test for the Ollama + LiteLLM wiring. See [`testlocalmodel/README.md`](testlocalmodel/README.md).
 - `partyPlanner/` — Alfred-at-Wayne-Manor smolagents demo. Runs a `CodeAgent` (Python-snippet tool calls) and a `ToolCallingAgent` (JSON tool calls) on the same model for comparison. See [`partyPlanner/README.md`](partyPlanner/README.md).
 - `partyPlannerMultiagent/` — multi-agent version of the party planner. A `CodeAgent` manager delegates to two `ToolCallingAgent` workers (`song_agent`, `food_agent`) and combines their output. See [`partyPlannerMultiagent/README.md`](partyPlannerMultiagent/README.md).
+- `partyPlannerMultiagentUI/` — same manager/worker setup as `partyPlannerMultiagent/`, wrapped in `smolagents.GradioUI` for a browser chat interface. Manager is named "Devoted Butler". See [`partyPlannerMultiagentUI/README.md`](partyPlannerMultiagentUI/README.md).
