@@ -57,3 +57,8 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
+
+# multiAgents writes saved_map.png to CWD on every run. The committed sample
+# is multiAgents/sample_output.png so the demo doesn't overwrite it.
+/saved_map.png
+multiAgents/saved_map.png

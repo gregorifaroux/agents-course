@@ -6,6 +6,12 @@ Hierarchical multi-agent demo built on `smolagents`. A **manager** agent orchest
 
 Find Batman filming locations + supercar factories worldwide, compute cargo-plane travel time from each to Gotham (40.7128° N, 74.0060° W), and render them as a `plotly.express.scatter_map`, saved to `saved_map.png`.
 
+## Sample output
+
+![Scatter map of Batman filming locations and supercar factories, colored by cargo-plane travel time to Gotham](sample_output.png)
+
+Snapshot from a verified end-to-end run (2026-10-06). `sample_output.png` is the committed artifact. The agent writes a fresh `saved_map.png` to CWD on every run (gitignored).
+
 ## Why multi-agent
 
 Two reasons:
