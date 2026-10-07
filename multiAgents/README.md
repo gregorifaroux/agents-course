@@ -29,9 +29,9 @@ Two reasons:
 - `planning_interval=5` (re-plans every 5 steps), `verbosity_level=2` (full trace to stdout), `max_steps=15`.
 - `final_answer_checks=[check_reasoning_and_plot]` must pass before the loop terminates.
 
-**Vision validator** (callback, not an agent — `llama3.2-vision:11b`)
-- Role: look at the saved PNG, grade PASS/FAIL on whether the plot answers the task.
-- Wired as a `final_answer_checks` callback. No tools, no planning loop — just one LLM call that raises on FAIL so the manager retries.
+**Final-answer check** (callback, stub)
+- Wired as a `final_answer_checks` callback. In production this slot would hold a vision-model call that opens the saved PNG and grades it PASS/FAIL (right places plotted, color = travel time, correct plotting API, etc.).
+- Here it is a no-op that prints a note and returns `True`. The judge model (`llama3.2-vision:11b`) is a multi-GB download on top of two 32b qwen agents already loaded, and every FAIL burns a full manager retry on 32b inference. Overkill for a local teaching demo. The wiring is left in place so the hook is visible.
 
 ## Flow
 
@@ -43,9 +43,7 @@ TASK
         ├─ calculate_cargo_travel_time(...) per point
         ├─ build plotly scatter_map, fig.write_image("saved_map.png")
         └─ final_answer(fig)
-              └─ check_reasoning_and_plot (vision model grades the PNG)
-                    PASS → done
-                    FAIL → raises, manager retries
+              └─ check_reasoning_and_plot (stub: prints a note, returns True)
 ```
 
 The manager has no search or page-visit tools. It delegates to `geocoder_agent(task="...")` as a function. The task prompt passes the exact place names to the delegate so the sub-agent doesn't have to invent them.
@@ -77,17 +75,16 @@ uv pip install -r requirements.txt
 
 ```bash
 ollama pull qwen2.5-coder:32b        # manager + geocoder_agent
-ollama pull llama3.2-vision:11b      # final-answer vision check
 ollama serve                         # must be running on 127.0.0.1:11434
 ```
 
 The 32b model is ~20 GB. Needs enough unified memory / VRAM to load it; on Apple Silicon, ≥32 GB RAM is comfortable.
 
-## Final-answer vision check
+## Final-answer check
 
-`check_reasoning_and_plot` passes the saved PNG to a local vision model (`llama3.2-vision:11b` via Ollama) to validate the plot. Fully local — no API keys needed.
+`check_reasoning_and_plot` is a stub: it prints a note that in production a vision model would grade `saved_map.png` here, and returns `True`. See the module docstring in `multiAgents.py` for why it is not wired to `llama3.2-vision:11b` on local.
 
-To disable the check entirely, remove `final_answer_checks=[check_reasoning_and_plot]` from `manager_agent`.
+To restore the vision check, replace the stub body with a `LiteLLMModel("ollama_chat/llama3.2-vision:11b", …)` call that reads `PLOT_PATH`, sends `{image + prompt}`, and raises on `"FAIL"` in the response. Pull the model first with `ollama pull llama3.2-vision:11b` and confirm your Ollama build supports the `mllama` architecture.
 
 ## Run
 
